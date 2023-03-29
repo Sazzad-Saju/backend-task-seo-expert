@@ -149,6 +149,7 @@
           </div>
 
           <!-- START SHOW ELEMENT ON CLICKING USER -->
+
           <div class="user-div hide u-box-shadow-1">
             <h4 class="px-4 pt-5">Rowja Mehjabeen</h4>
             <div class="user--label mx-4">
@@ -355,18 +356,20 @@
                   <th>Industry</th>
                 </tr>
               </thead>
-              <tbody>
-                <tr>
+              {{-- loop here --}}
+              @foreach ($peoples as $people)
+                  <tbody>
+                    <tr>
                   <td>
                     <input class="form-check-input" type="checkbox" value="" />
                   </td>
                   <td>
                     <a href="user01.html" class="person-name">
-                      Rowja Mehjabeen
+                      {{$people->name}}
                     </a>
                   </td>
-                  <td>Web Developer</td>
-                  <td>Google</td>
+                  <td>{{$people->title}}</td>
+                  <td>{{$people->company}}</td>
                   <td>
                     <button
                       type="button"
@@ -410,127 +413,12 @@
                       </div>
                     </div>
                   </td>
-                  <td>Dinajpur, Bangladesh</td>
-                  <td>150</td>
-                  <td>computer, software</td>
+                  <td>{{$people->location}}</td>
+                  <td>{{$people->employees}}</td>
+                  <td>{{$people->industry}}</td>
                 </tr>
-                <tr>
-                  <td>
-                    <input class="form-check-input" type="checkbox" value="" />
-                  </td>
-                  <td>
-                    <a href="user01.html" class="person-name">
-                      Rowja Mehjabeen
-                    </a>
-                  </td>
-                  <td>Web Developer</td>
-                  <td>Google</td>
-                  <td>
-                    <button
-                      type="button"
-                      class="btn btn-access btn-access--phone"
-                      id="accessBtn"
-                    >
-                      Access Email
-                    </button>
-
-                    <div class="message-box hide-text">
-                      Verified email costs one credit.
-                    </div>
-
-                    <div class="button-group hide" id="buttonGroup">
-                      <a
-                        class="btn btn-access btn-access--phone"
-                        href="settings/upgrade.html"
-                      >
-                        <i class="bi bi-phone"></i>
-                        <i class="bi bi-caret-down-fill"></i>
-                      </a>
-
-                      <div
-                        class="message-box message-box--phone hide-text"
-                        id="messagePhone"
-                      ></div>
-
-                      <a
-                        class="btn btn-access btn-access--email"
-                        href="settings/upgrade.html"
-                      >
-                        <i class="bi bi-envelope"></i>
-                        <i class="bi bi-caret-down-fill"></i>
-                      </a>
-
-                      <div
-                        class="message-box message-box--email hide-text"
-                        id="messageEmail"
-                      >
-                        <!-- Email not available -->
-                      </div>
-                    </div>
-                  </td>
-                  <td>Dinajpur, Bangladesh</td>
-                  <td>150</td>
-                  <td>computer, software</td>
-                </tr>
-                <tr>
-                  <td>
-                    <input class="form-check-input" type="checkbox" value="" />
-                  </td>
-                  <td>
-                    <a href="user01.html" class="person-name">
-                      Rowja Mehjabeen
-                    </a>
-                  </td>
-                  <td>Web Developer</td>
-                  <td>Google</td>
-                  <td>
-                    <button
-                      type="button"
-                      class="btn btn-access btn-access--phone"
-                      id="accessBtn"
-                    >
-                      Access Email
-                    </button>
-
-                    <div class="message-box hide-text">
-                      Verified email costs one credit.
-                    </div>
-
-                    <div class="button-group hide" id="buttonGroup">
-                      <a
-                        class="btn btn-access btn-access--phone"
-                        href="settings/upgrade.html"
-                      >
-                        <i class="bi bi-phone"></i>
-                        <i class="bi bi-caret-down-fill"></i>
-                      </a>
-
-                      <div
-                        class="message-box message-box--phone hide-text"
-                        id="messagePhone"
-                      ></div>
-
-                      <a
-                        class="btn btn-access btn-access--email"
-                        href="settings/upgrade.html"
-                      >
-                        <i class="bi bi-envelope"></i>
-                        <i class="bi bi-caret-down-fill"></i>
-                      </a>
-
-                      <div
-                        class="message-box message-box--email hide-text"
-                        id="messageEmail"
-                      >
-                        <!-- Email not available -->
-                      </div>
-                    </div>
-                  </td>
-                  <td>Dinajpur, Bangladesh</td>
-                  <td>150</td>
-                  <td>computer, software</td>
-                </tr>
-              </tbody>
+                  </tbody>
+              @endforeach
             </table>
           </div>
           <!-- END TABLE -->
