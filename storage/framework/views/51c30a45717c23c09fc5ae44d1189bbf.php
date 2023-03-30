@@ -10,7 +10,7 @@
       content="Displaying all data related to people from Li Data's Database"
     />
     <meta name="keywords" content="li data," />
-    <meta name="csrf-token" content="{{ csrf_token() }}">
+    <meta name="csrf-token" content="<?php echo e(csrf_token()); ?>">
 
     <title>People | Li Data</title>
 
@@ -37,11 +37,11 @@
     />
 
     <!-- Custom CSS -->
-    <link rel="stylesheet" href="{{asset('assets/css/style.css')}}" />
+    <link rel="stylesheet" href="<?php echo e(asset('assets/css/style.css')); ?>" />
     
 
     <!-- Favicon -->
-    <link rel="shortcut icon" href="{{asset('assets/images/icons/favicon.ico')}}" />
+    <link rel="shortcut icon" href="<?php echo e(asset('assets/images/icons/favicon.ico')); ?>" />
   </head>
 
   <body>
@@ -53,7 +53,7 @@
       >
         <div class="container-fluid justify-content-end">
           <a class="navbar-brand" href="index.html">
-            <img class="img-fluid" src="{{asset('assets/images/logo.svg')}}" alt="li data" />
+            <img class="img-fluid" src="<?php echo e(asset('assets/images/logo.svg')); ?>" alt="li data" />
           </a>
 
           <button
@@ -273,7 +273,7 @@
               id="searchPeople"
               class="w-100"
               placeholder="Enter name..."
-              value="{{old('name')}}"
+              value="<?php echo e(old('name')); ?>"
             />
             <form action="" class="d-flex justify-content-end mt-2">
               <button type="button" id="searchPeopleBtn" class="btn btn-blue rounded-1 w-100">
@@ -358,9 +358,9 @@
                   <th>Industry</th>
                 </tr>
               </thead>
-              {{-- loop here --}}
               
-              @foreach ($users as $user)
+              
+              <?php $__currentLoopData = $users; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $user): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
                   <tbody>
                     <tr>
                   <td>
@@ -368,17 +368,18 @@
                   </td>
                   <td>
                     <a href="user01.html" class="person-name">
-                      {{$user->name}}
+                      <?php echo e($user->name); ?>
+
                     </a>
                   </td>
-                  <td>{{$user->title}}</td>
-                  <td>{{$user->company}}</td>
+                  <td><?php echo e($user->title); ?></td>
+                  <td><?php echo e($user->company); ?></td>
                   <td>
                     <a
                       type="button"
                       class="btn btn-access btn-access--phone"
                       id="accessBtn"
-                      href="{{route('admin.dashboard.access', $user->id)}}"
+                      href="<?php echo e(route('admin.dashboard.access', $user->id)); ?>"
                     >
                       Access Email
                     </a>
@@ -417,12 +418,12 @@
                       </div>
                     </div>
                   </td>
-                  <td>{{$user->location}}</td>
-                  <td>{{$user->employees}}</td>
-                  <td>{{$user->industry}}</td>
+                  <td><?php echo e($user->location); ?></td>
+                  <td><?php echo e($user->employees); ?></td>
+                  <td><?php echo e($user->industry); ?></td>
                 </tr>
                   </tbody>
-              @endforeach
+              <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
             </table>
           </div>
           <!-- END TABLE -->
@@ -464,14 +465,15 @@
 
     
     <!-- Custom JS -->
-    <script src="{{asset('assets/js/navbar.js')}}"></script>
-    <script src="{{asset('assets/js/people.js')}}"></script>
-    <script src="{{asset('assets/js/script.js')}}"></script>
+    <script src="<?php echo e(asset('assets/js/navbar.js')); ?>"></script>
+    <script src="<?php echo e(asset('assets/js/people.js')); ?>"></script>
+    <script src="<?php echo e(asset('assets/js/script.js')); ?>"></script>
     <!-- axios -->
     <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
     <!-- toastr -->
-    {!! Toastr::message() !!}
-        <link rel="stylesheet" type="text/css" href="{{asset('assets/css/toastr.min.css')}}">
+    <?php echo Toastr::message(); ?>
+
+        <link rel="stylesheet" type="text/css" href="<?php echo e(asset('assets/css/toastr.min.css')); ?>">
 
     <script>
       //filter
@@ -479,7 +481,7 @@
       //name
       $( "#searchPeopleBtn").click(function(){
         let name = $( "#searchPeople").val()
-       axios.post("{{route('user.filter')}}", {
+       axios.post("<?php echo e(route('user.filter')); ?>", {
           searchField: name
         })
         .then(function (response) {
@@ -496,7 +498,7 @@
       $( "#searchTitleBtn").click(function(){
         let title = $( "#searchTitle").val()
 
-       axios.post("{{route('user.filter')}}", {
+       axios.post("<?php echo e(route('user.filter')); ?>", {
           searchField: title
         })
         .then(function (response) {
@@ -513,7 +515,7 @@
       $("#searchCompanyBtn").click(function(){
         let company = $("#searchCompany").val()
 
-        axios.post("{{route('user.filter')}}",{
+        axios.post("<?php echo e(route('user.filter')); ?>",{
           searchField: company
         })
         .then(function(response){
@@ -564,3 +566,4 @@
     </script>
   </body>
 </html>
+<?php /**PATH C:\Users\User\Documents\GitHub Proj\SEO Expert\backend-task-seo-expert\backend-task-seo-expert\resources\views/dashboard.blade.php ENDPATH**/ ?>
