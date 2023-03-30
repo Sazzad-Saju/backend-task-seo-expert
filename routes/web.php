@@ -20,4 +20,5 @@ use App\Http\Controllers\DashboardController;
 
 Route::get('/', [DashboardController::class,'index'])->name('admin.dashboard.index');
 Route::post('/filter', [DashboardController::class, 'filter'])->name('user.filter');
+Route::post('/download', [DashboardController::class, 'download'])->name('user.download');
 Route::get('/dashboard/{id}', [DashboardController::class, 'access'])->name('admin.dashboard.access');

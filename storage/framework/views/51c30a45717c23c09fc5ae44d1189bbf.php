@@ -324,6 +324,8 @@
 
         <!-- START MAIN DASHBOARD -->
         <section class="section-user-dashboard--main">
+        <form action="<?php echo e(route('user.download')); ?>" method="post">
+          <?php echo csrf_field(); ?>
           <div class="container">
             <div class="row">
               <div class="col-md-4 ms-auto d-flex justify-content-end mt-4">
@@ -340,91 +342,103 @@
             class="section-table table-scrollable mx-5 mt-4 mb-2"
             style="width: 75vw; overflow: auto; max-height: 78vh"
           >
-            <table
-              class="table table-hover table-bordered table-responsive"
-              id="peopleTable"
-            >
-              <thead>
-                <tr>
-                  <th class="px-4">
-                    <a onclick="checkAll(event)" class="selectAll"> Select All </a>
-                  </th>
-                  <th>Name</th>
-                  <th>Title</th>
-                  <th>Company</th>
-                  <th>Quick Actions</th>
-                  <th>Contact Location</th>
-                  <th>Employees</th>
-                  <th>Industry</th>
-                </tr>
-              </thead>
-              
-              
-              <?php $__currentLoopData = $users; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $user): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
-                  <tbody>
-                    <tr>
-                  <td>
-                    <input class="form-check-input" type="checkbox" value="" />
-                  </td>
-                  <td>
-                    <a href="user01.html" class="person-name">
-                      <?php echo e($user->name); ?>
+            
+              <table
+                class="table table-hover table-bordered table-responsive"
+                id="peopleTable"
+              >
+                <thead>
+                  <tr>
+                    <th class="px-4">
+                      <a onclick="checkAll(event)" class="selectAll"> Select All </a>
+                    </th>
+                    <th>Name</th>
+                    <th>Title</th>
+                    <th>Company</th>
+                    <th>Quick Actions</th>
+                    <th>Contact Location</th>
+                    <th>Employees</th>
+                    <th>Industry</th>
+                  </tr>
+                </thead>
+                
+                
+                <?php $__currentLoopData = $users; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $user): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+                    <tbody>
+                      <tr>
+                    <td>
+                      
+                      <input name="userIds[]" class="form-check-input" type="checkbox" value="<?php echo e($user->id); ?>" />
+                    </td>
+                    <td>
+                      <a href="user01.html" class="person-name">
+                        <?php echo e($user->name); ?>
 
-                    </a>
-                  </td>
-                  <td><?php echo e($user->title); ?></td>
-                  <td><?php echo e($user->company); ?></td>
-                  <td>
-                    <a
-                      type="button"
-                      class="btn btn-access btn-access--phone"
-                      id="accessBtn"
-                      href="<?php echo e(route('admin.dashboard.access', $user->id)); ?>"
-                    >
-                      Access Email
-                    </a>
-
-                    <div class="message-box hide-text">
-                      Verified email costs one credit.
-                    </div>
-
-                    <div class="button-group hide" id="buttonGroup">
+                      </a>
+                    </td>
+                    <td><?php echo e($user->title); ?></td>
+                    <td><?php echo e($user->company); ?></td>
+                    <td>
                       <a
+                        type="button"
+                        
                         class="btn btn-access btn-access--phone"
-                        href="settings/upgrade.html"
+                        id="accessBtn"
+                        href="<?php echo e(route('admin.dashboard.access', $user->id)); ?>"
                       >
-                        <i class="bi bi-phone"></i>
-                        <i class="bi bi-caret-down-fill"></i>
+                        Access Email
                       </a>
+                      <div>
+                        <?php if(isset($user_email)): ?>
+                          <?php echo e($user_email); ?>
 
-                      <div
-                        class="message-box message-box--phone hide-text"
-                        id="messagePhone"
-                      ></div>
-
-                      <a
-                        class="btn btn-access btn-access--email"
-                        href="settings/upgrade.html"
-                      >
-                        <i class="bi bi-envelope"></i>
-                        <i class="bi bi-caret-down-fill"></i>
-                      </a>
-
-                      <div
-                        class="message-box message-box--email hide-text"
-                        id="messageEmail"
-                      >
-                        <!-- Email not available -->
+                          <br>
+                        <?php endif; ?>
                       </div>
-                    </div>
-                  </td>
-                  <td><?php echo e($user->location); ?></td>
-                  <td><?php echo e($user->employees); ?></td>
-                  <td><?php echo e($user->industry); ?></td>
-                </tr>
-                  </tbody>
-              <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
-            </table>
+                      <div class="message-box hide-text">
+                        Verified email costs one credit.
+                      </div>
+
+                      <div class="button-group hide" id="buttonGroup">
+                        
+                        
+                        <a
+                          class="btn btn-access btn-access--phone"
+                          href="settings/upgrade.html"
+                        >
+                          <i class="bi bi-phone"></i>
+                          <i class="bi bi-caret-down-fill"></i>
+                        </a>
+
+                        <div
+                          class="message-box message-box--phone hide-text"
+                          id="messagePhone"
+                        ></div>
+
+                        <a
+                          class="btn btn-access btn-access--email"
+                          href="settings/upgrade.html"
+                        >
+                          <i class="bi bi-envelope"></i>
+                          <i class="bi bi-caret-down-fill"></i>
+                        </a>
+
+                        <div
+                          class="message-box message-box--email hide-text"
+                          id="messageEmail"
+                        >
+                          <!-- Email not available -->
+                        </div>
+                      </div>
+                    </td>
+                    <td><?php echo e($user->location); ?></td>
+                    <td><?php echo e($user->employees); ?></td>
+                    <td><?php echo e($user->industry); ?></td>
+                  </tr>
+                    </tbody>
+                <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
+              </table>
+            
           </div>
           <!-- END TABLE -->
 
@@ -432,17 +446,16 @@
           <div class="container">
             <div class="row">
               <div class="col-md-4 ms-auto py-4 d-flex justify-content-end">
-                <button
-                  type="submit"
-                  class="btn btn-download border-3"
-                  disabled="disabled"
-                >
+                
+
+                <button type="submit" class="btn btn-download border-3" disabled="disabled">
                   <i class="bi bi-download"></i>
                   &nbsp; Download Selected Data
                 </button>
               </div>
             </div>
           </div>
+          </form>
         </section>
         <!-- END MAIN DASHBOARD -->
       </section>
@@ -471,10 +484,31 @@
     <!-- axios -->
     <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
     <!-- toastr -->
+    <script src="http://cdn.bootcss.com/toastr.js/latest/js/toastr.min.js"></script>
     <?php echo Toastr::message(); ?>
 
         <link rel="stylesheet" type="text/css" href="<?php echo e(asset('assets/css/toastr.min.css')); ?>">
 
+  //download csv
+    <script>
+    function downloadCSV(){
+      let userIDs = []
+      $("input:checkbox[name=userCheckBox]:checked").each(function(){
+        userIDs.push($(this).val());
+      });
+      axios.post("<?php echo e(route('user.download')); ?>", {
+          ids: userIDs
+        })
+        .then(function (response) {
+          console.log(response)
+        })
+        .catch(function (error) {
+          console.log(error);
+        });
+      
+    }
+    
+    </script>
     <script>
       //filter
 
@@ -547,6 +581,7 @@
         });
       });
     </script>
+    //checkbox all selected
     <script>
       var checkboxs = document.querySelectorAll("input[type = 'checkbox']");
       var flag=false;

@@ -18,14 +18,11 @@ class DashboardController extends Controller
     }
 
     public function access($id){
-        $admin_credit = DB::table('users')
-        ->where('id',1)
-        ->select('credit')
-        ->get();
-        
-        dd($admin);
-
-        // $peoples = DB::table('people')->get();
+        $data['users'] = User::latest()->get();
+        $user_exist = User::where('id',$id)->get();
+        // return $user_exist;
+        $data['user_email'] = $user_exist[0]->email;
+        return view('dashboard', $data);
     }
 
     public function filter(Request $request){ 
@@ -35,13 +32,47 @@ class DashboardController extends Controller
             ->latest()->get();
         
         foreach($users as $user){
-            $user->credit = intval($user->credit) - 1;
-            $user->save();
+            $user->decrement('credit');
+            // $user->credit = intval($user->credit) - 1;
+            // $user->save();
         }
 
-        Toastr::success('Credit deducted for the resulted users!', "Credit Deduction");
+         Toastr::success('One credit deducted for the resulted users!', "Credit Deduction");
         return view('dashboard',['users' => $users]);
 
         
+    }
+
+    public function download(Request $request){ 
+
+        $fileName = 'users.csv';
+        $users = User::whereIn('id', $request->userIds)->get();
+
+        
+
+        $headers = array(
+            "Content-type"        => "text/csv",
+            "Content-Disposition" => "attachment; filename=$fileName",
+            "Pragma"              => "no-cache",
+            "Cache-Control"       => "must-revalidate, post-check=0, pre-check=0",
+            "Expires"             => "0"
+        );
+
+        $columns = array('Name');
+
+        $callback = function() use($users, $columns) {
+            $file = fopen('php://output', 'w');
+            fputcsv($file, $columns);
+
+            foreach ($users as $user) {
+                $row['Name']  = $user->name;
+
+                fputcsv($file, array($row['Name']));
+            }
+
+            fclose($file);
+        };
+
+        return response()->stream($callback, 200, $headers);
     }
 }

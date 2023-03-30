@@ -324,6 +324,8 @@
 
         <!-- START MAIN DASHBOARD -->
         <section class="section-user-dashboard--main">
+        <form action="{{route('user.download')}}" method="post">
+          @csrf
           <div class="container">
             <div class="row">
               <div class="col-md-4 ms-auto d-flex justify-content-end mt-4">
@@ -340,90 +342,104 @@
             class="section-table table-scrollable mx-5 mt-4 mb-2"
             style="width: 75vw; overflow: auto; max-height: 78vh"
           >
-            <table
-              class="table table-hover table-bordered table-responsive"
-              id="peopleTable"
-            >
-              <thead>
-                <tr>
-                  <th class="px-4">
-                    <a onclick="checkAll(event)" class="selectAll"> Select All </a>
-                  </th>
-                  <th>Name</th>
-                  <th>Title</th>
-                  <th>Company</th>
-                  <th>Quick Actions</th>
-                  <th>Contact Location</th>
-                  <th>Employees</th>
-                  <th>Industry</th>
-                </tr>
-              </thead>
-              {{-- loop here --}}
-              
-              @foreach ($users as $user)
-                  <tbody>
-                    <tr>
-                  <td>
-                    <input class="form-check-input" type="checkbox" value="" />
-                  </td>
-                  <td>
-                    <a href="user01.html" class="person-name">
-                      {{$user->name}}
-                    </a>
-                  </td>
-                  <td>{{$user->title}}</td>
-                  <td>{{$user->company}}</td>
-                  <td>
-                    <a
-                      type="button"
-                      class="btn btn-access btn-access--phone"
-                      id="accessBtn"
-                      href="{{route('admin.dashboard.access', $user->id)}}"
-                    >
-                      Access Email
-                    </a>
-
-                    <div class="message-box hide-text">
-                      Verified email costs one credit.
-                    </div>
-
-                    <div class="button-group hide" id="buttonGroup">
+            
+              <table
+                class="table table-hover table-bordered table-responsive"
+                id="peopleTable"
+              >
+                <thead>
+                  <tr>
+                    <th class="px-4">
+                      <a onclick="checkAll(event)" class="selectAll"> Select All </a>
+                    </th>
+                    <th>Name</th>
+                    <th>Title</th>
+                    <th>Company</th>
+                    <th>Quick Actions</th>
+                    <th>Contact Location</th>
+                    <th>Employees</th>
+                    <th>Industry</th>
+                  </tr>
+                </thead>
+                {{-- loop here --}}
+                
+                @foreach ($users as $user)
+                    <tbody>
+                      <tr>
+                    <td>
+                      {{-- <input name="userCheckBox" class="form-check-input" type="checkbox" value="{{$user->id}}" /> --}}
+                      <input name="userIds[]" class="form-check-input" type="checkbox" value="{{$user->id}}" />
+                    </td>
+                    <td>
+                      <a href="user01.html" class="person-name">
+                        {{$user->name}}
+                      </a>
+                    </td>
+                    <td>{{$user->title}}</td>
+                    <td>{{$user->company}}</td>
+                    <td>
                       <a
+                        type="button"
+                        
                         class="btn btn-access btn-access--phone"
-                        href="settings/upgrade.html"
+                        id="accessBtn"
+                        href="{{route('admin.dashboard.access', $user->id)}}"
                       >
-                        <i class="bi bi-phone"></i>
-                        <i class="bi bi-caret-down-fill"></i>
+                        Access Email
                       </a>
-
-                      <div
-                        class="message-box message-box--phone hide-text"
-                        id="messagePhone"
-                      ></div>
-
-                      <a
-                        class="btn btn-access btn-access--email"
-                        href="settings/upgrade.html"
-                      >
-                        <i class="bi bi-envelope"></i>
-                        <i class="bi bi-caret-down-fill"></i>
-                      </a>
-
-                      <div
-                        class="message-box message-box--email hide-text"
-                        id="messageEmail"
-                      >
-                        <!-- Email not available -->
+                      <div>
+                        @if(isset($user_email))
+                          {{$user_email}}
+                          <br>
+                        @endif
                       </div>
-                    </div>
-                  </td>
-                  <td>{{$user->location}}</td>
-                  <td>{{$user->employees}}</td>
-                  <td>{{$user->industry}}</td>
-                </tr>
-                  </tbody>
-              @endforeach
-            </table>
+                      <div class="message-box hide-text">
+                        Verified email costs one credit.
+                      </div>
+
+                      <div class="button-group hide" id="buttonGroup">
+                        {{-- @if(isset($user_email))
+                          {{$user_email}}
+                          <br>
+                        @endif --}}
+                        
+                        <a
+                          class="btn btn-access btn-access--phone"
+                          href="settings/upgrade.html"
+                        >
+                          <i class="bi bi-phone"></i>
+                          <i class="bi bi-caret-down-fill"></i>
+                        </a>
+
+                        <div
+                          class="message-box message-box--phone hide-text"
+                          id="messagePhone"
+                        ></div>
+
+                        <a
+                          class="btn btn-access btn-access--email"
+                          href="settings/upgrade.html"
+                        >
+                          <i class="bi bi-envelope"></i>
+                          <i class="bi bi-caret-down-fill"></i>
+                        </a>
+
+                        <div
+                          class="message-box message-box--email hide-text"
+                          id="messageEmail"
+                        >
+                          <!-- Email not available -->
+                        </div>
+                      </div>
+                    </td>
+                    <td>{{$user->location}}</td>
+                    <td>{{$user->employees}}</td>
+                    <td>{{$user->industry}}</td>
+                  </tr>
+                    </tbody>
+                @endforeach
+              </table>
+            
           </div>
           <!-- END TABLE -->
 
@@ -431,17 +447,19 @@
           <div class="container">
             <div class="row">
               <div class="col-md-4 ms-auto py-4 d-flex justify-content-end">
-                <button
-                  type="submit"
-                  class="btn btn-download border-3"
-                  disabled="disabled"
-                >
+                {{-- <button type="submit" class="btn btn-download border-3" onclick="downloadCSV()" disabled="disabled">
+                  <i class="bi bi-download"></i>
+                  &nbsp; Download Selected Data
+                </button> --}}
+
+                <button type="submit" class="btn btn-download border-3" disabled="disabled">
                   <i class="bi bi-download"></i>
                   &nbsp; Download Selected Data
                 </button>
               </div>
             </div>
           </div>
+          </form>
         </section>
         <!-- END MAIN DASHBOARD -->
       </section>
@@ -470,9 +488,30 @@
     <!-- axios -->
     <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
     <!-- toastr -->
+    <script src="http://cdn.bootcss.com/toastr.js/latest/js/toastr.min.js"></script>
     {!! Toastr::message() !!}
         <link rel="stylesheet" type="text/css" href="{{asset('assets/css/toastr.min.css')}}">
 
+  //download csv
+    <script>
+    function downloadCSV(){
+      let userIDs = []
+      $("input:checkbox[name=userCheckBox]:checked").each(function(){
+        userIDs.push($(this).val());
+      });
+      axios.post("{{route('user.download')}}", {
+          ids: userIDs
+        })
+        .then(function (response) {
+          console.log(response)
+        })
+        .catch(function (error) {
+          console.log(error);
+        });
+      
+    }
+    
+    </script>
     <script>
       //filter
 
@@ -545,6 +584,7 @@
         });
       });
     </script>
+    //checkbox all selected
     <script>
       var checkboxs = document.querySelectorAll("input[type = 'checkbox']");
       var flag=false;
