@@ -20,8 +20,9 @@ class DashboardController extends Controller
     public function access($id){
         $data['users'] = User::latest()->get();
         $user_exist = User::where('id',$id)->get();
-        // return $user_exist;
         $data['user_email'] = $user_exist[0]->email;
+        $user_exist[0]->decrement('credit');
+        Toastr::success('One credit deducted for the resulted users!', "Credit Deduction");
         return view('dashboard', $data);
     }
 
@@ -33,11 +34,9 @@ class DashboardController extends Controller
         
         foreach($users as $user){
             $user->decrement('credit');
-            // $user->credit = intval($user->credit) - 1;
-            // $user->save();
         }
 
-         Toastr::success('One credit deducted for the resulted users!', "Credit Deduction");
+        Toastr::success('One credit deducted for the resulted users!', "Credit Deduction");
         return view('dashboard',['users' => $users]);
 
         
@@ -45,11 +44,12 @@ class DashboardController extends Controller
 
     public function download(Request $request){ 
 
+        if(!$request->has('userIds')){
+            Toastr::error('No data selected!', "Selection Error");
+            return redirect()->back();
+        }
         $fileName = 'users.csv';
         $users = User::whereIn('id', $request->userIds)->get();
-
-        
-
         $headers = array(
             "Content-type"        => "text/csv",
             "Content-Disposition" => "attachment; filename=$fileName",
@@ -58,7 +58,7 @@ class DashboardController extends Controller
             "Expires"             => "0"
         );
 
-        $columns = array('Name');
+        $columns = array('Name','Email','Title','Company','Location','Industry','Credit');
 
         $callback = function() use($users, $columns) {
             $file = fopen('php://output', 'w');
@@ -66,12 +66,23 @@ class DashboardController extends Controller
 
             foreach ($users as $user) {
                 $row['Name']  = $user->name;
-
-                fputcsv($file, array($row['Name']));
+                $row['Email']  = $user->email;
+                $row['Title']  = $user->title;
+                $row['Company']  = $user->company;
+                $row['Location']  = $user->location;
+                $row['Industry']  = $user->industry;
+                $row['Credit']  = $user->credit;
+                fputcsv($file, array($row['Name'],$row['Email'],$row['Title'],$row['Company'],$row['Location'],$row['Industry'],$row['Credit']));
             }
 
             fclose($file);
         };
+        
+        foreach($users as $user){
+            $user->decrement('credit');
+        }
+
+        Toastr::success('One credit deducted for the resulted users!', "Credit Deduction");
 
         return response()->stream($callback, 200, $headers);
     }

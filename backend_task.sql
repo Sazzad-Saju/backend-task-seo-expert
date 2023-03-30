@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Mar 29, 2023 at 09:05 AM
+-- Generation Time: Mar 30, 2023 at 01:54 PM
 -- Server version: 10.4.22-MariaDB
 -- PHP Version: 8.1.2
 
@@ -74,31 +74,6 @@ CREATE TABLE `password_reset_tokens` (
 -- --------------------------------------------------------
 
 --
--- Table structure for table `people`
---
-
-CREATE TABLE `people` (
-  `id` int(11) NOT NULL,
-  `name` varchar(255) NOT NULL,
-  `title` varchar(255) NOT NULL,
-  `company` varchar(255) NOT NULL,
-  `location` varchar(255) NOT NULL,
-  `employees` int(11) NOT NULL,
-  `industry` varchar(255) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
-
---
--- Dumping data for table `people`
---
-
-INSERT INTO `people` (`id`, `name`, `title`, `company`, `location`, `employees`, `industry`) VALUES
-(1, 'Rowja Mehjabeen', 'Web Developer', 'Google', 'Dinajpur, Bangladesh', 150, 'computer, software'),
-(2, 'Sazzad Saju', 'Backend Developer', 'NetCoden Inc.', 'Dhaka, Bangladesh', 100, 'computer, software'),
-(3, 'John Doe', 'Frontend Developer', 'Facebook', 'Kishoreganj, Bangladesh', 50, 'computer, software');
-
--- --------------------------------------------------------
-
---
 -- Table structure for table `personal_access_tokens`
 --
 
@@ -124,9 +99,13 @@ CREATE TABLE `personal_access_tokens` (
 CREATE TABLE `users` (
   `id` bigint(20) UNSIGNED NOT NULL,
   `name` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `title` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `company` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `location` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `employees` int(11) NOT NULL,
+  `industry` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
   `email` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `credit` int(11) DEFAULT NULL,
-  `email_verified_at` timestamp NULL DEFAULT NULL,
+  `credit` int(11) NOT NULL DEFAULT 50,
   `password` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
   `remember_token` varchar(100) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `created_at` timestamp NULL DEFAULT NULL,
@@ -137,8 +116,11 @@ CREATE TABLE `users` (
 -- Dumping data for table `users`
 --
 
-INSERT INTO `users` (`id`, `name`, `email`, `credit`, `email_verified_at`, `password`, `remember_token`, `created_at`, `updated_at`) VALUES
-(1, 'admin', 'admin@mail.com', 50, '2023-03-29 05:56:32', '$2a$12$8bsrCN6jIS1e7DsaIHM7i.aVnLyMP9MZJTYaTWDVLw5Rfgw7cZLbW', NULL, '2023-03-29 05:56:32', '2023-03-29 05:56:32');
+INSERT INTO `users` (`id`, `name`, `title`, `company`, `location`, `employees`, `industry`, `email`, `credit`, `password`, `remember_token`, `created_at`, `updated_at`) VALUES
+(1, 'Rowja Mehjabeen', 'Web Develover', 'Google', 'Dinajpur, Bangladesh', 150, 'computer, software', 'rowja@mail.com', 50, '$2y$10$dFOgJjsPEOU4d0khK6kEruUxxxd5ScmyhGksnhMyknS8K8v0UCoxa', NULL, NULL, '2023-03-30 05:32:13'),
+(2, 'Sazzad Saju', 'Backend Develover', 'NetCoden Inc.', 'Dhaka, Bangladesh', 100, 'computer, software', 'saju@mail.com', 50, '$2y$10$nT13YjpVkZYxbPDugFe0cukm1xI0ZJVs6pDpgmtWSG2k28i.X6UgO', NULL, NULL, '2023-03-30 05:32:13'),
+(3, 'Mili Mehjabeen', 'Frontend Develover', 'Youtube', 'Kishoregonj, Bangladesh', 50, 'computer, software', 'mili@mail.com', 50, '$2y$10$aDRK/nxRUc4.L0jeaFOACeiS1KbMPDvaWg8dv/Za3eZq8vdK3LZT2', NULL, NULL, '2023-03-30 05:32:13'),
+(4, 'John Doe', 'Web Develover', 'Google', 'Dinajpur, Bangladesh', 150, 'computer, software', 'john@mail.com', 50, '$2y$10$Ib7WQ4OwG3Vx3.SybRGCh.7pTEo393oE9TSQHAYwPVDfn4ljLcvHK', NULL, NULL, '2023-03-30 05:32:13');
 
 --
 -- Indexes for dumped tables
@@ -162,12 +144,6 @@ ALTER TABLE `migrations`
 --
 ALTER TABLE `password_reset_tokens`
   ADD PRIMARY KEY (`email`);
-
---
--- Indexes for table `people`
---
-ALTER TABLE `people`
-  ADD PRIMARY KEY (`id`);
 
 --
 -- Indexes for table `personal_access_tokens`
@@ -201,12 +177,6 @@ ALTER TABLE `migrations`
   MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
 
 --
--- AUTO_INCREMENT for table `people`
---
-ALTER TABLE `people`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
-
---
 -- AUTO_INCREMENT for table `personal_access_tokens`
 --
 ALTER TABLE `personal_access_tokens`
@@ -216,7 +186,7 @@ ALTER TABLE `personal_access_tokens`
 -- AUTO_INCREMENT for table `users`
 --
 ALTER TABLE `users`
-  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;

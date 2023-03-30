@@ -329,7 +329,7 @@
           <div class="container">
             <div class="row">
               <div class="col-md-4 ms-auto d-flex justify-content-end mt-4">
-                <button type="button" class="btn btn-download border-3">
+                <button type="submit" class="btn btn-download border-3">
                   <i class="bi bi-download"></i>
                   &nbsp; Download Selected Data
                 </button>
@@ -378,6 +378,7 @@
                     <td>{{$user->title}}</td>
                     <td>{{$user->company}}</td>
                     <td>
+                    @if(!(isset($user_email) && $user->email == $user_email))
                       <a
                         type="button"
                         
@@ -387,49 +388,41 @@
                       >
                         Access Email
                       </a>
+                    @endif
                       <div>
-                        @if(isset($user_email))
+                        @if(isset($user_email) && $user->email == $user_email)
                           {{$user_email}}
                           <br>
+                            <a
+                              class="btn btn-access btn-access--phone"
+                              href="settings/upgrade.html"
+                            >
+                              <i class="bi bi-phone"></i>
+                              <i class="bi bi-caret-down-fill"></i>
+                            </a>
+                            <div
+                              class="message-box message-box--phone hide-text"
+                              id="messagePhone"
+                            ></div>
+
+                            <a
+                              class="btn btn-access btn-access--email"
+                              href="settings/upgrade.html"
+                            >
+                              <i class="bi bi-envelope"></i>
+                              <i class="bi bi-caret-down-fill"></i>
+                            </a>
+
+                            <div
+                              class="message-box message-box--email hide-text"
+                              id="messageEmail"
+                            >
+                              <!-- Email not available -->
+                            </div>
                         @endif
                       </div>
                       <div class="message-box hide-text">
                         Verified email costs one credit.
-                      </div>
-
-                      <div class="button-group hide" id="buttonGroup">
-                        {{-- @if(isset($user_email))
-                          {{$user_email}}
-                          <br>
-                        @endif --}}
-                        
-                        <a
-                          class="btn btn-access btn-access--phone"
-                          href="settings/upgrade.html"
-                        >
-                          <i class="bi bi-phone"></i>
-                          <i class="bi bi-caret-down-fill"></i>
-                        </a>
-
-                        <div
-                          class="message-box message-box--phone hide-text"
-                          id="messagePhone"
-                        ></div>
-
-                        <a
-                          class="btn btn-access btn-access--email"
-                          href="settings/upgrade.html"
-                        >
-                          <i class="bi bi-envelope"></i>
-                          <i class="bi bi-caret-down-fill"></i>
-                        </a>
-
-                        <div
-                          class="message-box message-box--email hide-text"
-                          id="messageEmail"
-                        >
-                          <!-- Email not available -->
-                        </div>
                       </div>
                     </td>
                     <td>{{$user->location}}</td>
@@ -447,12 +440,8 @@
           <div class="container">
             <div class="row">
               <div class="col-md-4 ms-auto py-4 d-flex justify-content-end">
-                {{-- <button type="submit" class="btn btn-download border-3" onclick="downloadCSV()" disabled="disabled">
-                  <i class="bi bi-download"></i>
-                  &nbsp; Download Selected Data
-                </button> --}}
 
-                <button type="submit" class="btn btn-download border-3" disabled="disabled">
+                <button type="submit" class="btn btn-download border-3" id="downloadBtn" disabled="disabled">
                   <i class="bi bi-download"></i>
                   &nbsp; Download Selected Data
                 </button>
@@ -508,13 +497,11 @@
         .catch(function (error) {
           console.log(error);
         });
-      
     }
     
     </script>
     <script>
-      //filter
-
+      //*filter*/
       //name
       $( "#searchPeopleBtn").click(function(){
         let name = $( "#searchPeople").val()
@@ -584,18 +571,21 @@
         });
       });
     </script>
+
     //checkbox all selected
     <script>
       var checkboxs = document.querySelectorAll("input[type = 'checkbox']");
       var flag=false;
       function checkAll(e){
         if(flag == false){
+          document.getElementById('downloadBtn').disabled = false;
           checkboxs.forEach(function(checkbox){
             checkbox.checked = true;
             flag = true;  
           })
         }else{
           checkboxs.forEach(function(checkbox){
+            document.getElementById('downloadBtn').disabled = true;
             checkbox.checked = false;
             flag = false;
           })
